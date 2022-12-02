@@ -1,26 +1,47 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
+//import 'bootstrap/dist/css/bootstrap.min.css'; //TODO: integrate default 
 
-import { Button, Card, Modal, ButtonGroup, ToggleButton } from 'react-bootstrap';
-import { Icon } from 'react-bootstrap-icons';
-import { MdArrowBackIosNew, MdArrowForwardIos, MdMenuOpen } from "react-icons/md";
+import { Container, Row, Col, Button, Card, Modal, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import Draggable from 'react-draggable';
+
+import { MdArrowBackIosNew, MdArrowForwardIos, MdMenuOpen, MdSwapVert, MdMoreVert } from "react-icons/md";
+import CustSearch from './img/cust_search_icon.svg';
+import CustSave from './img/cust_save_icon.svg';
 
 // 1 Components
 
 /// 1.1 Internal UI Components 
 
 //// 1.1.1 Dynamic Query Box
-class QueryBox extends React.Component<{query: string}>{
-  render () {
-    return <>
-      <div className='queryBoxPos'>
-        <Card className='queryBox'>
-          <p>{this.props.query}</p>
-        </Card>
-      </div>
-    </>
+const QueryBox: React.FunctionComponent<{query: string}> = props =>{
+  const [nQuery, setnQuery] = React.useState(props.query);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setnQuery(e.target.value);
   }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setNewQuery(nQuery);
+      console.log(''.concat('Query Change: ', nQuery));
+    }
+  }
+
+  return <>
+    <Container className='queryBoxPos'>
+      <Draggable handle='#handle'>
+        <Card className='queryBox'>
+          <div style={{display:'flex', flexDirection:'row'}}>
+            <MdSwapVert style={{padding:'1px 1px 1px 5px', alignSelf:'center'}} size={20} id='handle'/>
+            <input className='toolBar_input'onChange={handleChange}onKeyDown={handleKeyDown}value={nQuery}/>
+            <img style={{alignSelf:'flex-end'}} src={CustSave} alt='Save Icon'/>
+          </div>
+        </Card>
+      </Draggable>
+    </Container>
+  </>
 }
 
 
@@ -35,24 +56,42 @@ function openOptions() {
   //TODO
 }
 
-function ToolBar () {
+function openManualSearch() {
+  //TODO
+}
+
+function ToolBar () { 
   const [query, setQuery] = React.useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setNewQuery(query);
+      console.log(''.concat('New Query: ', query));
+      setQuery('');
+    }
+  }
+
   return <>
-    <div className='toolBarPos'>
+    <Container className='toolBarPos'>
       <Card className='toolBar'>
-        <input className='toolBar_input'placeholder='Search all files'onChange={handleChange}value={query}/>
+        <div style={{display:'flex', flexDirection:'row'}}>
+          <input className='toolBar_input'placeholder='Search all files'onChange={handleChange}onKeyDown={handleKeyDown}value={query}/>
+          <img style={{alignSelf:'flex-end'}} src={CustSearch} alt='Search Icon'/>
+        </div>
         <hr style={{borderTop: 'dashed 1px',borderBottom:'0px', color:'edecea', width:'98%'}} />
-        <div style={{display:'flex',justifyContent:'flex-end', flex:'1'}}>
-          <Button style={{alignSelf:'center'}} onClick={() => openOptions()}>Options</Button>
-          <Button style={{alignSelf:'center'}} onClick={() => setNewQuery(query)}>New Query</Button>
+        <div style={{display:'flex',justifyContent:'flex-start', flex:'1'}}>
+          <div style={{height: '25px', width: '15px'}}/>
+          <Button className='button' style= {{alignSelf: 'center'}} onClick={() => openManualSearch}>Manual Search</Button>
+          <div style={{height: '25px', width: '15px'}}/>
+          <Button className='button' style={{alignSelf:'center'}} onClick={() => openOptions()}>Options</Button>
+          <div style={{height: '25px', width: '15px'}}/>
         </div>
       </Card>
-    </div>
+    </Container>
   </>
 
 }
@@ -60,17 +99,57 @@ function ToolBar () {
 
 
 //// 1.1.3 Project Header
-class HeaderBox extends React.Component{
-  render() {
-    return <>
-      <div className='headerBoxPos'>
-        <Card className='headerBox'>
+function HeaderBox() {
+  const [title, setTitle] = React.useState('');
 
-        </Card>
-      </div>
-    </>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value)
   }
-}
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setTitle(title);
+      console.log(''.concat('Title: ', title));
+    }
+  }
+
+  const [dur_toggleValue, setdur_ToggleValue] = React.useState('3');  
+  const duration_toggles = [
+    {name: '1', value: '1'},
+    {name: '5', value: '2'},
+    {name: '10', value: '3'},
+    {name: '15', value: '4'},
+    {name: 'Custom', value: '5'}
+  ];
+  
+  return <>
+    <Container className='headerBoxPos'>
+      <Card className='headerBox'>
+        <div style={{display:'flex', flexDirection:'row'}}>
+          <input className='headerBox_title' placeholder='Untitled Project'value={title}onChange={handleChange}onKeyDown={handleKeyDown} />
+          <img style={{alignSelf:'center'}} src={CustSave} alt='Save Icon'/>
+        </div>
+        <hr style={{borderTop: 'dashed 1px',borderBottom:'0px', color:'edecea', width:'98%'}} />
+        <ButtonGroup className='button'>
+          {duration_toggles.map((toggle, idx) => (
+            <ToggleButton 
+              key={idx}
+              id={`toggle-${idx}`}
+              type="radio"
+              variant={'primary'}
+              name='toggle'
+              value={toggle.value}
+              checked={dur_toggleValue == toggle.value}
+              onChange={(e) => setdur_ToggleValue(e.currentTarget.value)}
+            >
+              {toggle.name} 
+            </ToggleButton>
+          ))}
+        </ButtonGroup> 
+      </Card>
+    </Container>
+  </>
+  }
 
 
 /// 1.2 UI Layout Components
@@ -82,13 +161,12 @@ class Workspace extends React.Component<{children: React.ReactNode | React.React
     const ToolBarPos = {alignSelf: 'flex-end', position: 'absolute'};
     
     return<>
-      <div className='workspace'>
+      <Container className='workspace'>
         <div className='workspace_dynamicSpace'>
           {this.props.children}
           <div style={ToolBarPos as React.CSSProperties}><ToolBar/></div>
         </div>
-
-      </div>
+      </Container>
     </>
   }
 } 
@@ -97,18 +175,20 @@ class Workspace extends React.Component<{children: React.ReactNode | React.React
 //// 1.2.2 Side Menu
 
 export interface SideMenuStatus {
-  collapsed: boolean
+  l_collapsed: boolean
+  r_collapsed: boolean
 }
 
 function getDefaultSMStatus() {
   const defaultSMStatus: SideMenuStatus = {
-    collapsed: true
+    l_collapsed: true,
+    r_collapsed: true
   }
   return defaultSMStatus;
 }
 
-function getPreexistingSMStatus() {
-  const preexistingSMStatusString = localStorage.getItem('status');
+function getPreexistingSMStatus(json_string: string) {
+  const preexistingSMStatusString = localStorage.getItem(json_string);
   const defaultSMStatus = getDefaultSMStatus();
 
   if (preexistingSMStatusString == null) {
@@ -117,7 +197,7 @@ function getPreexistingSMStatus() {
     try {
       return JSON.parse(preexistingSMStatusString) as SideMenuStatus;
     } catch (e) {
-      localStorage.setItem('state', JSON.stringify(defaultSMStatus));
+      localStorage.setItem(json_string, JSON.stringify(defaultSMStatus));
       return defaultSMStatus;
     }
   }
@@ -126,13 +206,13 @@ function getPreexistingSMStatus() {
 const SMInnerLayoutContext = React.createContext<SideMenuStatus>(getDefaultSMStatus());
 
 function SideMenuLeft () {
-  const [SMState, setSMState] = React.useState(getPreexistingSMStatus());
+  const [SMState, setSMState] = React.useState(getPreexistingSMStatus('l_status'));
   const setSMStateInterface = (data: SideMenuStatus) => {
-    localStorage.setItem('state', JSON.stringify(data))
+    localStorage.setItem('l_status', JSON.stringify(data));
     setSMState(data);
   }
 
-  const widthvw = SMState.collapsed ? 4: 30;  
+  const widthvw = SMState.l_collapsed ? 4: 30;  
   const sideMenuParentWidth = {width: `${widthvw}vw`};
 
   const [toggleValue, setToggleValue] = React.useState('1');  
@@ -141,22 +221,22 @@ function SideMenuLeft () {
     {name: 'Files', value: '2'}
   ];
 
-  if (!SMState.collapsed) {
+  if (!SMState.l_collapsed) {
     return (
       <SMInnerLayoutContext.Provider value={SMState}>
-        <div className='sideMenu_parent' style={sideMenuParentWidth}>
+        <Container className='sideMenu_parent' style={sideMenuParentWidth}>
           <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', flex:'1'}}>
-            <MdArrowBackIosNew style={{alignSelf:'center'}} size={42} onClick={_ => setSMStateInterface({collapsed: !SMState.collapsed})}/>
+            <MdArrowBackIosNew style={{alignSelf:'center'}} size={42} onClick={_ => setSMStateInterface({l_collapsed: !SMState.l_collapsed, r_collapsed: SMState.r_collapsed})}/>
             <p style={{alignSelf:'center', fontFamily: 'space-grotesk-light', fontSize: '10px'}}>Close</p>
           </div>
           <div className='sideMenu_child_expanded'>
-            <ButtonGroup>
+            <ButtonGroup className='button'>
               {toggles.map((toggle, idx) => (
                 <ToggleButton 
                   key={idx}
                   id={`toggle-${idx}`}
                   type="radio"
-                  variant={idx % 2 ? 'outline-success' : 'outline-danger'}
+                  variant={'primary'}
                   name='toggle'
                   value={toggle.value}
                   checked={toggleValue == toggle.value}
@@ -168,32 +248,32 @@ function SideMenuLeft () {
             </ButtonGroup> 
           </div>
           <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', flex:'1'}}/>
-        </div>
+        </Container>
       </SMInnerLayoutContext.Provider>
     )
   } else {
     return (
       <SMInnerLayoutContext.Provider value={SMState}>
-        <div className='sideMenu_parent' style={sideMenuParentWidth}>
+        <Container className='sideMenu_parent' style={sideMenuParentWidth}>
           <div className='sideMenu_child_closed'>
-            <MdArrowForwardIos style={{alignSelf: 'center'}} size={42} onClick={_ => setSMStateInterface({collapsed: !SMState.collapsed})}/>
+            <MdArrowForwardIos style={{alignSelf: 'center'}} size={42} onClick={_ => setSMStateInterface({l_collapsed: !SMState.l_collapsed, r_collapsed: SMState.r_collapsed})}/>
             <p style={{alignSelf: 'center', fontFamily: 'space-grotesk-light', fontSize: '10px'}}>Explore</p>
           </div>
-        </div>
+        </Container>
       </SMInnerLayoutContext.Provider>    
     )
   }
 }
 
 function SideMenuRight () {
-  const [SMState, setSMState] = React.useState(getPreexistingSMStatus());
+  const [SMState, setSMState] = React.useState(getPreexistingSMStatus('r_status'));
 
   const setSMStateInterface = (data: SideMenuStatus) => {
-    localStorage.setItem('state', JSON.stringify(data))
+    localStorage.setItem('r_status', JSON.stringify(data));
     setSMState(data);
   }
 
-  const widthvw = SMState.collapsed ? 4: 30;
+  const widthvw = SMState.r_collapsed ? 4: 30;
   const sideMenuParentWidth = {width: `${widthvw}vw`};
 
   const [toggleValue, setToggleValue] = React.useState('1')
@@ -203,10 +283,10 @@ function SideMenuRight () {
     {name: 'Explore', value: '3'}
   ];
 
-  if (!SMState.collapsed) {
+  if (!SMState.r_collapsed) {
     return (
       <SMInnerLayoutContext.Provider value={SMState}>
-        <div className='sideMenu_parent_right' style={sideMenuParentWidth}>
+        <Container className='sideMenu_parent_right' style={sideMenuParentWidth}>
           <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', flex:'1'}}/>
           <div className='sideMenu_child_expanded_right'>
             <ButtonGroup>
@@ -215,7 +295,7 @@ function SideMenuRight () {
                   key={idx}
                   id={`toggle-${idx}`}
                   type="radio"
-                  variant={idx % 2 ? 'outline-success' : 'outline-danger'}
+                  variant={'primary'}
                   name='toggle'
                   value={toggle.value}
                   checked={toggleValue == toggle.value}
@@ -227,22 +307,22 @@ function SideMenuRight () {
             </ButtonGroup> 
           </div>
           <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', flex:'1'}}>
-            <MdArrowForwardIos style={{alignSelf:'center'}} size={42} onClick={_ => setSMStateInterface({collapsed: !SMState.collapsed})}/>
+            <MdArrowForwardIos style={{alignSelf:'center'}} size={42} onClick={_ => setSMStateInterface({l_collapsed: SMState.l_collapsed, r_collapsed: !SMState.r_collapsed})}/>
             <p style={{alignSelf:'center', fontFamily: 'space-grotesk-light', fontSize: '10px'}}>Close</p>
           </div>          
 
-        </div>
+        </Container>
       </SMInnerLayoutContext.Provider>
     )
   } else {
     return (
       <SMInnerLayoutContext.Provider value={SMState}>
-        <div className='sideMenu_parent_right' style={sideMenuParentWidth}>
+        <Container className='sideMenu_parent_right' style={sideMenuParentWidth}>
           <div className='sideMenu_child_closed'>
-            <MdMenuOpen style={{alignSelf: 'center'}} size={42} onClick={_ => setSMStateInterface({collapsed: !SMState.collapsed})}/>
+            <MdMenuOpen style={{alignSelf: 'center'}} size={42} onClick={_ => setSMStateInterface({l_collapsed: SMState.l_collapsed, r_collapsed: !SMState.r_collapsed})}/>
             <p style={{alignSelf: 'center', fontFamily: 'space-grotesk-light', fontSize: '10px'}}>Details</p>
           </div>
-        </div>
+        </Container>
       </SMInnerLayoutContext.Provider>    
     )
   }
@@ -254,7 +334,7 @@ function SideMenuRight () {
 class EditLayout extends React.Component<{children: React.ReactNode | React.ReactNode[]}>{
   render () {
     return <>
-      <div id='root' className='row' style={{alignItems: 'strech'}}>
+      <div id='root' className='row' style={{}}>
         <SideMenuLeft/>
         <Workspace>
           {this.props.children}
@@ -272,18 +352,18 @@ class EditPage extends React.Component{
     const footerWhiteSpace = {flexBasis: '100%', height: '50vh'};
 
     return <>
-      <div style={parent}>
+      <Container style={parent}>
         <EditLayout>
           <HeaderBox/>
-          <QueryBox query='1'/>
-          <QueryBox query='2'/>
-          <QueryBox query='3'/>
-          <QueryBox query='4'/>
-          <QueryBox query='5'/>
-          <QueryBox query='6'/>
+          <QueryBox query='Cat jumps in the air'/>
+          <QueryBox query='Someone drops their phone'/>
+          <QueryBox query='Ganesh goes to bed'/>
+          <QueryBox query='Harsha sits in a chair'/>
+          <QueryBox query='Harsha talks'/>
+          <QueryBox query='Fade out'/>
           <div style={footerWhiteSpace}/>
         </EditLayout>
-      </div>
+      </Container>
     </>
   }
 }
