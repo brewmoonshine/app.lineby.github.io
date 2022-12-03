@@ -4,11 +4,13 @@ import './App.css';
 //import 'bootstrap/dist/css/bootstrap.min.css'; //TODO: integrate default 
 
 import { Container, Row, Col, Button, Card, Modal, ButtonGroup, ToggleButton } from 'react-bootstrap';
-import Draggable from 'react-draggable';
+import Draggable, { DraggableData, PositionOffsetControlPosition } from 'react-draggable';
 
 import { MdArrowBackIosNew, MdArrowForwardIos, MdMenuOpen, MdSwapVert, MdMoreVert } from "react-icons/md";
 import CustSearch from './img/cust_search_icon.svg';
 import CustSave from './img/cust_save_icon.svg';
+
+let queryStringList: string[] = [];
 
 // 1 Components
 
@@ -29,9 +31,15 @@ const QueryBox: React.FunctionComponent<{query: string}> = props =>{
     }
   }
 
+  const [position, setPosition] = React.useState({x: 0, y:0});
+
+  const trackPos = (data: DraggableData) => {
+    setPosition({x: data.x, y:data.y})
+  }
+
   return <>
     <Container className='queryBoxPos'>
-      <Draggable handle='#handle'>
+      <Draggable onDrag={(e, data) => trackPos(data)} handle='#handle'>
         <Card className='queryBox'>
           <div style={{display:'flex', flexDirection:'row'}}>
             <MdSwapVert style={{padding:'1px 1px 1px 5px', alignSelf:'center'}} size={20} id='handle'/>
@@ -49,7 +57,8 @@ const QueryBox: React.FunctionComponent<{query: string}> = props =>{
 
 function setNewQuery(query: string) {
   console.log(query);
-  // TODO
+  console.log(queryStringList);
+  queryStringList.concat(query)
 }
 
 function openOptions() {
@@ -113,14 +122,6 @@ function HeaderBox() {
     }
   }
 
-  const [dur_toggleValue, setdur_ToggleValue] = React.useState('3');  
-  const duration_toggles = [
-    {name: '1', value: '1'},
-    {name: '5', value: '2'},
-    {name: '10', value: '3'},
-    {name: '15', value: '4'},
-    {name: 'Custom', value: '5'}
-  ];
   
   return <>
     <Container className='headerBoxPos'>
@@ -130,22 +131,6 @@ function HeaderBox() {
           <img style={{alignSelf:'center'}} src={CustSave} alt='Save Icon'/>
         </div>
         <hr style={{borderTop: 'dashed 1px',borderBottom:'0px', color:'edecea', width:'98%'}} />
-        <ButtonGroup className='button'>
-          {duration_toggles.map((toggle, idx) => (
-            <ToggleButton 
-              key={idx}
-              id={`toggle-${idx}`}
-              type="radio"
-              variant={'primary'}
-              name='toggle'
-              value={toggle.value}
-              checked={dur_toggleValue == toggle.value}
-              onChange={(e) => setdur_ToggleValue(e.currentTarget.value)}
-            >
-              {toggle.name} 
-            </ToggleButton>
-          ))}
-        </ButtonGroup> 
       </Card>
     </Container>
   </>
@@ -345,6 +330,7 @@ class EditLayout extends React.Component<{children: React.ReactNode | React.Reac
   }
 }
 
+
 //TODO: Need to make the query box generation dynamic -> The current content in EditLayout is just a test
 class EditPage extends React.Component{
   render() {
@@ -355,18 +341,16 @@ class EditPage extends React.Component{
       <Container style={parent}>
         <EditLayout>
           <HeaderBox/>
-          <QueryBox query='Cat jumps in the air'/>
-          <QueryBox query='Someone drops their phone'/>
-          <QueryBox query='Ganesh goes to bed'/>
-          <QueryBox query='Harsha sits in a chair'/>
-          <QueryBox query='Harsha talks'/>
-          <QueryBox query='Fade out'/>
+            {queryStringList.map((query, idx) => (
+              <QueryBox query={query} key={idx}/>
+            ))}
           <div style={footerWhiteSpace}/>
         </EditLayout>
       </Container>
     </>
   }
 }
+
 
 
 // 2 Run the App
