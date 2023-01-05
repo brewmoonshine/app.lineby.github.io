@@ -1,0 +1,79 @@
+@font-face {
+    font-family: space-grotesk-light;
+    src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-Light.ttf') format('truetype');
+  }
+  
+@font-face {
+  font-family: space-grotesk-regular;
+  src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: space-grotesk-medium;
+  src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: space-grotesk-semibold;
+  src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: space-grotesk-bold;
+  src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-Bold.ttf') format('truetype');
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.section_box {
+  border-radius: 20px;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+}
+.line_style {
+  border-top: 2px dashed #1A1B25;
+}
+
+/*Top Bar Section*/
+.top_bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+/*Vert Timeline*/
+.headerBox {
+    height: 15vh;
+    width: 100%;
+    align-self: center;
+    background: rgba(255,255,255);
+    border-radius: 20px 20px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.headerBox_title {
+    border: 0px;
+    border-radius: 30px;
+    padding: 30px 0px 0px 20px;
+    height: 40%;
+    width: 88.5%;
+    font-family: space-grotesk-medium;
+    font-size: 40px;
+}
+
+/*Video Player Section*/
+.vid_pos {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
