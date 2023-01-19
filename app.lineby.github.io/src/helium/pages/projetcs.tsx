@@ -14,14 +14,18 @@ import Cust_Search_Icon from '../../img/cust_search_icon.svg'
 import Cust_Save_Icon from '../../img/cust_save_icon.svg'
 
 function Project () {
-    const size = {height:''}
+    const size = {height:'100%', width:'100%'}
     
     return <>
-    
+        <div style={size}>
+            
+        </div>
     </>
 }
 
 function Proj_tilings () {
+    const size = {height:''}
+    
     return <>
     
     </>
