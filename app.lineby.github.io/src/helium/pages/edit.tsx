@@ -30,7 +30,7 @@ function Header() {
     }
     
     return <>
-        <div className="headerBox d-flex flex-row justify-content-between">
+        <div className="headerBox d-flex flex-row justify-content-between" style={{width:'47vw', position:'absolute'}}>
             <input className='headerBox_title' placeholder='Untitled Project'value={title}onChange={handleChange}onKeyDown={handleKeyDown} />
             <img style={{alignSelf:'center'}} src={Cust_Save_Icon} alt='Save Icon'/>
         </div>
@@ -58,8 +58,10 @@ function QueryBox() {
         }
     }
 
+    const bufferSpace = {height:'2vh'}
+
     return <>
-        <div className="d-flex flex-row justify-content-between" style={{height:'12vh'}}>
+        <div className="section_box d-flex flex-row justify-content-between" style={{height:'12vh', padding:'2%'}}>
             <div style={{width:'100%', alignSelf:'center'}}>
                 <div className="queryBox_pre d-flex flex-row justify-content-between" >
                     <input className='queryBox_searchBar' placeholder='something to be here'value={query}onChange={handleChange}onKeyDown={handleKeyDown} />
@@ -71,6 +73,7 @@ function QueryBox() {
                 </div>
             </div>
         </div>
+        <div style={bufferSpace}/>
     </>
 }
 
@@ -87,6 +90,8 @@ const QueryBox_vid: React.FunctionComponent<{currQuery: string}> = props => {
             console.log(''.concat('Re Query: ', query))
         }
     }
+
+    const bufferSpace = {height:'2vh'}
 
     return <>
         <div className="section_box d-flex flex-row justify-content-between" style={{height:'20vh', padding:'2%'}}>
@@ -107,11 +112,12 @@ const QueryBox_vid: React.FunctionComponent<{currQuery: string}> = props => {
                 </div>
             </div>
         </div>
+        <div style={bufferSpace}/>
     </>
 }
 
-const QueryBox_timeline: React.FunctionComponent<{vidLenSec: number}> = props => {
-    const minHeightvh = 20
+const QueryBox_timeline: React.FunctionComponent<{currQuery: string, vidLenSec: number}> = props => {
+    const minHeightvh = 13
     const lenHeight = props.vidLenSec*2
     var heightvh = 0;
     if (lenHeight > minHeightvh) {
@@ -120,24 +126,62 @@ const QueryBox_timeline: React.FunctionComponent<{vidLenSec: number}> = props =>
         heightvh = minHeightvh;
     }
 
+    const [query, setQuery] = React.useState(props.currQuery)
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(e.target.value)
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            setQuery(query)
+            console.log(''.concat('Re Query: ', query))
+        }
+    }
+
+    const bufferSpace = {height:'2vh'}
+    const test_rect = {height:'100%', width:'7vw', background:'#000000'}
+
     return <>
         <div className="section_box d-flex flex-row justify-content-between" style={{height:`${heightvh}vh`}}>
+            <div style={test_rect}>
+
+            </div>
+
+            <div style={{width:'100%', alignSelf:'flex-start', padding:'2%'}}>
+                <div className="queryBox_pre d-flex flex-row justify-content-between" >
+                    <input className='queryBox_searchBar' placeholder='something to be here'value={query}onChange={handleChange}onKeyDown={handleKeyDown} />
+                    <img style={{alignSelf:'center'}} src={Cust_Save_Icon} alt='Save Icon'/>                    
+                </div>
+                <div style={{height:'1.5vh'}} />
+                <div>
+                    <Button>More</Button>
+                </div>
+            </div>
+
 
         </div>
+        <div style={bufferSpace}/>
     </>
 }
 
 function VertTimeLine () {
     const section = {width: '50vw', height:'95.75vh', padding:'0.5%'}
+    const bufferSpace = {height:'9vh'}
 
     return <>
         <div style={section}>
             <div className="section_box" style={{height:'100%', width:'100%', padding:'2% 2% 2% 2%'}}>
-                <Header />
-                <QueryBox_timeline vidLenSec={40}/>
+                <Header/>
+                <div style={bufferSpace}/>
+                <QueryBox_timeline currQuery="Yasssss 40" vidLenSec={40}/>
+                <QueryBox_timeline currQuery="Yasssss 60" vidLenSec={60}/>
+                <QueryBox_timeline currQuery="Yasssss 2" vidLenSec={2}/>
                 <QueryBox_vid currQuery='Video select querybox'/>
                 <QueryBox />
 
+
+                <div style={bufferSpace}/>
             </div>
         </div>
     </>
