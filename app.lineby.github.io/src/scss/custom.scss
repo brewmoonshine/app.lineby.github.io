@@ -1,0 +1,17 @@
+// Custom Theme colors
+$primary: #470FF4;
+$secondary: #F6AE2D;
+$danger: #F26419;
+$success: #7AC74F;
+
+// Import bootstrap functions and variables
+@import "../../node_modules/bootstrap/scss/_functions";
+@import "../../node_modules/bootstrap/scss/_variables";
+
+$custom-theme-colors: (
+    "altdark": #1A1B25
+);
+
+$theme-colors: map-merge($custom-theme-colors, $theme-colors);
+
+@import "../../node_modules/bootstrap/scss/bootstrap";

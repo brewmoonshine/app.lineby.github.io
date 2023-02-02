@@ -6,8 +6,9 @@ import ReactPlayer from "react-player/lazy";
 import TopBar from "../components/topbar";
 
 // CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../HeliumApp.css'
+import '../../css/HeliumApp.css'
+import '../../css/custom.min.css';
+
 
 //SVG
 import Cust_Search_Icon from '../../img/cust_search_icon.svg'

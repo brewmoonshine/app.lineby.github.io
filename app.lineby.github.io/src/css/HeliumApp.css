@@ -1,0 +1,204 @@
+@font-face {
+    font-family: space-grotesk-light;
+    src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-Light.ttf') format('truetype');
+  }
+  
+@font-face {
+  font-family: space-grotesk-regular;
+  src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: space-grotesk-medium;
+  src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: space-grotesk-semibold;
+  src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: space-grotesk-bold;
+  src: url('../fonts/Space_Grotesk/static/SpaceGrotesk-Bold.ttf') format('truetype');
+}
+
+/*General*/
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.section_box {
+  border-radius: 20px;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+.section_box_spec {
+  z-index: 1;
+  transition-duration: 0.5s;
+  border-radius: 20px;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+.section_box_spec:hover {
+  z-index: inherit;
+  transition-duration: 0.5s;
+  border-radius: 20px;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  scale: 1.015;
+}
+.line_style {
+  border-top: 2px dashed #1A1B25;
+}
+
+/*Top Bar Section*/
+.top_bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/*~~~ Vert Timeline ~~~*/
+/*Header Box*/
+.headerBox {
+  transition-duration: 0.5s;
+  z-index: 2;
+  height: 4.5vh;
+  width: 100%;
+  align-self: center;
+  background: rgba(255,255,255);
+  border-radius: 20px 20px 20px 20px;
+  border-color: #1A1B25;
+  border-width: 3px;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.headerBox:hover {
+  transition-duration: 0.5s;
+  z-index: 2;
+  height: 15vh;
+  width: 100%;
+  align-self: center;
+  background: rgba(255,255,255);
+  border-radius: 20px 20px 20px 20px;
+  border-color: #1A1B25;
+  border-width: 3px;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.section_box_spec:hover+.headerBox,
+.headerBox:hover {
+  z-index: 2;
+}
+
+.headerBox_title {
+  transition-duration: 0.5s;
+  height: 4.5vh;
+}
+.headerBox_title:hover {
+  transition-duration: 0.5s;
+  height: 6.5vh;
+}
+.headerBox_title_text {
+  transition-duration: 0.5s;
+  border: 0px;
+  border-radius: 20px;
+  padding: 12px 0px 15px 20px;
+  height: 100%;
+  width: 100%;
+  font-family: space-grotesk-medium;
+  font-size: 25px;
+}
+.headerBox_title_text:hover {
+  transition-duration: 0.5s;
+  border: 0px;
+  border-radius: 20px;
+  padding: 15px 0px 15px 20px;
+  height: 100%;
+  width: 100%;
+  font-family: space-grotesk-medium;
+  font-size: 40px;
+}
+.headerBox_desc {
+  transition-duration: 0.5s;
+  height: 3vh;
+}
+.headerBox_desc:hover {
+  transition-duration: 0.5s;
+  height: 4.5vh;
+}
+.headerBox_desc_text {
+  transition-duration: 0.5s;
+  border: 0px;
+  border-radius: 20px;
+  padding: 15px 0px 15px 20px;
+  height: 3vh;
+  width: 100%;
+  font-family: space-grotesk-medium;
+  font-size: 16px;
+}
+.headerBox_desc_text:hover {
+  transition-duration: 0.5s;
+  border: 0px;
+  border-radius: 20px;
+  padding: 15px 0px 15px 20px;
+  height: 100%;
+  width: 100%;
+  font-family: space-grotesk-medium;
+  font-size: 22px;
+}
+/*QueryBox*/
+.queryBox_pre {
+  transition-duration: 0.5s;
+  height: 4vh;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  padding: 1px 1px 1px 1px;
+}
+.queryBox_pre:hover {
+  transition-duration: 0.5s;
+  height: 4vh;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  padding: 1px 1px 1px 1px;
+  scale: 1.015;
+}
+
+.queryBox_searchBar {
+  border: 0px;
+  border-radius: 20px;
+  padding: 15px 0px 15px 20px;
+  height: 100%;
+  width: 100%;
+  font-family: space-grotesk-medium;
+  font-size: 18px;
+}
+
+/*Video Player Section*/
+.vid_pos {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/*Video Component*/
+.thumbnail {
+  transition-duration: 0.5s;
+}
+.thumbnail:hover {
+  transition-duration: 0.5s;
+  scale: 1.07;
+}
+.vidView {
+  width: 50vw;
+  height: 50vh;
+}

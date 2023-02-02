@@ -4,8 +4,9 @@ import { Container, Row, Col, Button, Card, Modal, ButtonGroup, ToggleButton, Na
 import ReactPlayer from "react-player/lazy";
 
 // CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../HeliumApp.css'
+import '../../css/HeliumApp.css'
+import '../../css/custom.min.css';
+
 
 // SVG
 import Cust_logo_name from '../../img/cust_logo_name.svg';
@@ -30,7 +31,7 @@ function TopBar () {
     const svg_button = {background:'transparent', border:'none'}
 
     const [showAcc, setAccShow] = React.useState(false);
-    const [showLvl, setLvlShow] = React.useState(false) 
+    const [showLvl, setLvlShow] = React.useState(false); 
 
     const section = {width: '100vw', height: '4.25vh', padding: '0.5%'}    
     return <>

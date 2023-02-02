@@ -5,8 +5,10 @@ import { Container, Row, Col, Button, Card, Modal, ButtonGroup, ToggleButton, Na
 import Edit from "./pages/edit";
 
 // CSS
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './HeliumApp.css'
+//import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/HeliumApp.css'
+import '../css/custom.min.css';
+
 
 
 function App () {
