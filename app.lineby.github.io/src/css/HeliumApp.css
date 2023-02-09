@@ -190,6 +190,20 @@
   justify-content: center;
 }
 
+/*Menu Group Section*/
+.sideMenu {
+  transition-duration: 0.5s;
+  background: #470FF4;
+  height: 100%;
+  width: 5%;
+}
+.sideMenu:hover {
+  transition-duration: 0.5s;
+  background: #470FF4;
+  height: 100%;
+  width: 15%;
+}
+
 /*Video Component*/
 .thumbnail {
   transition-duration: 0.5s;

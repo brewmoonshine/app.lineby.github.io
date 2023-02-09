@@ -1,10 +1,14 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Container, Row, Col, Button, Card, Modal, ButtonGroup, ToggleButton, Nav, Navbar} from 'react-bootstrap';
+import { Container, Row, Col, Button, Card, Modal, ButtonGroup, ToggleButton, Dropdown} from 'react-bootstrap';
 import ReactPlayer from "react-player/lazy";
 
 import TopBar from "../components/topbar";
-import Video from '../components/videoComp';
+import Thumbnail from '../components/thumbNailComp';
+import EditBox from '../components/editComp';
+import TimelineEditor from "../components/timelineEditComp";
+import TranscriptEditor from "../components/transcriptEditComp";
+import VideoBrowser from "../components/videoBrowserComp";
 
 // CSS
 import '../../css/HeliumApp.css'
@@ -14,23 +18,6 @@ import '../../css/custom.min.css';
 import Cust_Search_Icon from '../../img/cust_search_icon.svg'
 import Cust_Save_Icon from '../../img/cust_save_icon.svg'
 
-
-// Global vars
-declare global {
-    // Query ID: the index of the query in the query text array below
-    var QueryID: Array<number>;
-    
-    // Query text
-    var QueryText: Array<string>;
-    
-    // File path to S3 bucket for selected clip
-    var FilePath: Array<string>;
-
-    // Frame nums [start, end] for selected 
-    var FrameNums: Array<[number, number]>; 
-
-    var escapeCode: string;
-}
 
 
 function Header() {
@@ -82,9 +69,9 @@ function Header() {
                     />
                     <img style={{alignSelf:'center'}} src={Cust_Save_Icon} alt='Save Icon'/>
                 </div>
-                <div style={{height:'0.5vh'}}/>
-                <div>
-
+                <div style={{height:'0.5vh'}} />
+                <div style={{background:'pink', height:'10vh'}}>
+                    <p>TODO: Add view options here</p>
                 </div>
             </div>
 
@@ -94,6 +81,8 @@ function Header() {
 
 function NewQueryBox() {
     const [query, setQuery] = React.useState('');
+    const [showTSearch, setShowTSearch] = React.useState(false);
+    const [showMSearch, setShowMSearch] = React.useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
@@ -123,11 +112,33 @@ function NewQueryBox() {
                 </div>
                 <div style={{height:'1.5vh'}} />
                 <div>
-                    <Button>More</Button>
+                    <Dropdown>
+                        <Dropdown.Toggle id='MoreSearch'>More</Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => setShowTSearch(true)}>Search With Transcript</Dropdown.Item>
+                            <Dropdown.Item onClick={() => setShowMSearch(true)}>Manually Search</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </div>
             </div>
         </div>
         <div style={bufferSpace}/>
+
+        <Modal className='modal-xl' show={showTSearch} onHide={() => setShowTSearch(false)} centered>
+            <Modal.Header closeButton>
+            </Modal.Header>
+            <Modal.Body className='d-flex flex-column' style={{height:'50vh'}}>
+                <VideoBrowser source={global.ProjMedia}/>
+            </Modal.Body>
+        </Modal>
+
+        <Modal className='modal-xl' show={showMSearch} onHide={() => setShowMSearch(false)} centered>
+            <Modal.Header closeButton>
+            </Modal.Header>
+            <Modal.Body className='d-flex flex-column' style={{height:'50vh'}}>
+                <VideoBrowser source={global.ProjMedia}/>
+            </Modal.Body>
+        </Modal>
     </>
 }
 
@@ -146,7 +157,8 @@ function QueryBox (currQuery: string) {
     }
 
     const bufferSpace = {height:'2vh'}
-
+    
+    //TODO: Allow for more than 3 video choices
     return <>
         <div className="section_box_spec d-flex flex-row justify-content-between" style={{height:'20vh', padding:'2%'}}>
             <div style={{width:'100%', alignSelf:'center'}}>
@@ -161,11 +173,20 @@ function QueryBox (currQuery: string) {
                 </div>
                 <div style={{height:'1.5vh'}} />
                 <div className="d-flex flex-row justify-content-between">
-                    <Button style={{alignSelf:'flex-start', margin:'1%'}}>More</Button>
-                    <div style={{width:'90%', overflow:'auto'}} className="queryBox_searchResults d-flex flex-row ">
-                        <Video heightPoint={120}/>
-                        <Video heightPoint={120}/>
-                        <Button style={{alignSelf:'center', margin:'1%'}}>Try Again</Button>
+                    <Dropdown>
+                        <Dropdown.Toggle id='MoreSearch' style={{alignSelf:'flex-start', margin:'2%'}}>More</Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item>Search With Transcript</Dropdown.Item>
+                            <Dropdown.Item>Manually Search</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <div style={{width:'90%', overflow:'hidden'}} className="queryBox_searchResults d-flex flex-row ">
+                        <div className="d-flex flex-row" style={{overflow:'scroll', width:'100%'}}>
+                            <Thumbnail.Thumbnail heightPoint={120} source=''/>
+                            <Thumbnail.Thumbnail heightPoint={120} source=''/>
+                            <Thumbnail.Thumbnail heightPoint={120} source=''/>
+                            <Button style={{alignSelf:'center', margin:'1%'}}>Try Again</Button>
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -206,7 +227,6 @@ function QueryBoxTimeline(currQuery: string, vidLenSec: number) {
     const bufferSpace = {height:'2vh'}
     const test_rect = {height:'100%', width:'7vw', background:'#000000'}
 
-
     return <>
         <div className="section_box_spec d-flex flex-row justify-content-between" style={{height:`${heightvh}vh`}}>
             <div style={test_rect}>
@@ -225,9 +245,14 @@ function QueryBoxTimeline(currQuery: string, vidLenSec: number) {
                     <img style={{alignSelf:'center'}} src={Cust_Search_Icon} alt='Search Icon'/>                    
                 </div>
                 <div style={{height:'1.5vh'}} />
-                <div className="d-flex flex-row justify-content-between">
-                    <Button onClick={() => setShowEdit(true)} style={{alignSelf:'flex-start', margin:'1%'}}>More</Button>
-
+                <div className="d-flex flex-row justify-content-between" style={{height:`${heightvh-10}vh`}}>
+                    <Button onClick={() => setShowEdit(true)} style={{alignSelf:'flex-start', margin:'1%'}}>Edit</Button>
+                    <div className="d-flex flex-column" style={{height:'100%', width:'100%'}}>
+                        <div style={{alignSelf:'center', overflowY:'scroll', width:'25vw'}}>
+                            <EditBox/>
+                            <EditBox/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -263,7 +288,7 @@ function QueryState(qid: number) {
     */
 
     var QT: string = global.QueryText[qid];
-    var FP: string = global.FilePath[qid];
+    var FP: string = global.SelQuFilePath[qid];
     var FNs: [number, number] = global.FrameNums[qid]
 
     if (QT != global.escapeCode) {
@@ -280,15 +305,9 @@ function QueryState(qid: number) {
 function QueryManager() {
     global.escapeCode = '-1';
 
-    // TODO: Attach these arrays to API
-    global.QueryID = [0, 1, 2, 4]
-    global.QueryText = ['60 frames', '10 frames', 'hello', global.escapeCode]
-    global.FilePath = ['filepath', 'filepath', global.escapeCode, global.escapeCode]
-    global.FrameNums = [[0, 60], [120, 130], [0, 0], [0,0]]
-
     let ReturnArr: Array<JSX.Element> = []
 
-    for (let i = 0; i < global.QueryID.length; i++) {
+    for (let i = 0; i < global.QueryId.length; i++) {
         ReturnArr.push(QueryState(i))
     }
 
@@ -314,6 +333,7 @@ function VertTimeLine () {
     </>
 }
 
+
 function VidPlayer () {
     const section = {width: '50vw', height:'47.875vh', padding:'1%'}
 
@@ -323,9 +343,17 @@ function VidPlayer () {
                 <div className="vid_pos">
                     <ReactPlayer url='https://www.youtube.com/watch?v=QH2-TGUlwu4' width='90%' height='90%' style={{alignSelf:'center'}}/>
                     
-                    <ButtonGroup style={{width:'25%', alignSelf:'center'}}>
+                    <ButtonGroup style={{alignSelf:'center', width:'30%', margin:'1%'}}>
                         <Button variant='success'>Start</Button>
                         <Button variant='danger'>Stop</Button>
+                        <Dropdown>
+                        <Dropdown.Toggle id='aspectR' style={{alignSelf:'flex-start', margin:'2%'}}>Aspect Ratio</Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item>16:9</Dropdown.Item>
+                            <Dropdown.Item>4:3</Dropdown.Item>
+                            <Dropdown.Item>1:1</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                     </ButtonGroup>
                 </div>
             </div>
@@ -333,35 +361,20 @@ function VidPlayer () {
     </>
 }
 
-//
-
-
 
 function MenuGroup () {
     const section = {width: '50vw', height:'47.875vh', padding:'1%'}
 
     return <>
         <div style={section}>
-            <div className="section_box" style={{height:'100%', width:'100%'}}>
-                <div style={{background:'#470FF4'}}>
-                    <p>Hello</p>
+            <div className="section_box d-flex flex-row" style={{height:'100%', width:'100%'}}>
+                <div className="sideMenu">
                 </div>
             </div>
         </div>
     </>
 }
 
-/*
-                <Navbar bg='primary' variant="dark" style={{borderRadius:'20px 20px 0px 0px'}}>
-                    <Container>
-                        <Nav className="me-auto">
-                            <Nav.Link href='#'>Home</Nav.Link>
-                            <Nav.Link href='#'>Objects</Nav.Link>
-                            <Nav.Link href='#'>My Media</Nav.Link>
-                        </Nav>
-                    </Container>
-                </Navbar>
-*/
 
 function Edit () {
     return <>
