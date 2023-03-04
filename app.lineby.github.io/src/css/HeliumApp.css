@@ -24,6 +24,9 @@
 }
 
 /*General*/
+::-webkit-scrollbar {
+    display: none;
+}
 .row {
   display: flex;
   flex-direction: row;
@@ -55,6 +58,11 @@
 .line_style {
   border-top: 2px dashed #1A1B25;
 }
+
+.modal-dialog {
+  width: 1000px;
+}
+
 
 /*Top Bar Section*/
 .top_bar {
@@ -111,7 +119,8 @@
   padding: 12px 0px 15px 20px;
   height: 100%;
   width: 100%;
-  font-family: space-grotesk-medium;
+  font-family: Articulat CF;
+  font-weight: 600;
   font-size: 25px;
 }
 .headerBox_title_text:hover {
@@ -121,7 +130,8 @@
   padding: 15px 0px 15px 20px;
   height: 100%;
   width: 100%;
-  font-family: space-grotesk-medium;
+  font-family: Articulat CF;
+  font-weight: 600;
   font-size: 40px;
 }
 .headerBox_desc {
@@ -139,7 +149,8 @@
   padding: 15px 0px 15px 20px;
   height: 3vh;
   width: 100%;
-  font-family: space-grotesk-medium;
+  font-family: Articulat CF;
+  font-weight: 600;
   font-size: 16px;
 }
 .headerBox_desc_text:hover {
@@ -149,7 +160,8 @@
   padding: 15px 0px 15px 20px;
   height: 100%;
   width: 100%;
-  font-family: space-grotesk-medium;
+  font-family: Articulat CF;
+  font-weight: 600;
   font-size: 22px;
 }
 /*QueryBox*/
@@ -166,7 +178,7 @@
   height: 4vh;
   width: 100%;
   border-radius: 20px;
-  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 0px 23px 10px rgba(0, 0, 0, 0.1);
   padding: 1px 1px 1px 1px;
   scale: 1.015;
 }
@@ -177,18 +189,44 @@
   padding: 15px 0px 15px 20px;
   height: 100%;
   width: 100%;
-  font-family: space-grotesk-medium;
+  font-family: Articulat CF Medium;
   font-size: 18px;
 }
 
 /*Video Player Section*/
-.vid_pos {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.view_port{
+  transition-duration: 0.5s;
 }
+.vid_side_menu_icon {
+  transition-duration: 0.5s;
+  scale: 1.35;
+  color: #FFF
+}
+.vid_side_menu_icon:hover {
+  transition-duration: 0.5s;
+  scale: 1.35;
+  color: #1A1B25;
+}
+.vid_side_menu {
+  transition-duration: 0.5s;
+  height: 35px;
+  width: 35px;
+  background: #1a1b25;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px 0px 5px 0px;
+}
+.vid_side_menu:hover {
+  transition-duration: 0.5s;
+  height: 27.5%;
+  width: 15%;
+  background: #FFF;
+  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+.vid_side_menu_text{
+  transform: rotate(-90deg);
+}
+
 
 /*Menu Group Section*/
 .sideMenu {
@@ -196,12 +234,14 @@
   background: #470FF4;
   height: 100%;
   width: 5%;
+  z-index: 2;
 }
 .sideMenu:hover {
   transition-duration: 0.5s;
   background: #470FF4;
   height: 100%;
-  width: 15%;
+  width: 20%;
+  z-index: 2;
 }
 
 /*Video Component*/

@@ -22,12 +22,9 @@ const Thumbnail_select: React.FunctionComponent<{heightPoint: number, source: st
         props.display(source)
     }
 
-    function clickOff() {
-        props.display('')
-    }
-
     return <>
-        <div className='thumbnail' style={test_rect} onClick={() => clickOn(props.source)}/>    
+        <div className='thumbnail' style={test_rect} onClick={() => clickOn(props.source)}>
+        </div>    
     </>
 }
 
@@ -113,7 +110,7 @@ const Thumbnail: React.FunctionComponent<{heightPoint: number, source: string}> 
             <Modal.Header closeButton>
             </Modal.Header>
             <Modal.Body className='d-flex flex-column' style={{height:'50vh'}}>
-                <ReactPlayer url='https://www.youtube.com/watch?v=QH2-TGUlwu4' width='90%' height='90%' style={{alignSelf:'center'}}/>
+                <ReactPlayer url={props.source} width='90%' height='90%' style={{alignSelf:'center'}}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={() => setShowVid(false)}>Close</Button>
