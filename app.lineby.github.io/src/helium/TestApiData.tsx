@@ -1,13 +1,10 @@
 import React from "react";
 
+// TODO: Clean This app up
 declare global {
+    // DB data
     var Query: Array<[number, string, string, [number, number]]>;
     var NextID: number;
-
-    var QueryId: Array<number>; //UID
-    var QueryText: Array<string>; // Text input 
-    var SelQuFilePath: Array<string>; // Query Selected video file path
-    var FrameNums: Array<[number, number]>; // Found [start, end] frame numbers for 
 
     var escapeCode: string; // 
 
@@ -15,9 +12,12 @@ declare global {
     var ProjMedia: Array<number>;
     var AllMedia: Array<string>;
     
+    // Session Data
+    var mobile: boolean;
     var ScriptQueryViewMode: boolean;
 }
 
+/* Obsolete test data 
 class TestValsE extends React.Component {
     render() {
         global.QueryId = [0];
@@ -69,6 +69,7 @@ class TestVals2 extends React.Component {
         return null;
     }
 }
+*/
 
 class TestVals3 extends React.Component {
     render () {
@@ -88,6 +89,20 @@ class TestVals3 extends React.Component {
     }
 }
 
+class TestVals3E extends React.Component {
+    render () {
+        global.Query = [
+        ]
+        global.NextID = 0;
+
+        global.LastSearchRes = [1,2,3]
+        global.ProjMedia = [1,3,4,6,7];
+        global.AllMedia = ['https://www.youtube.com/watch?v=fJ-QUDsRiJY', 'https://www.youtube.com/watch?v=_wIOqHSsV9c', 'https://www.youtube.com/watch?v=56K7rfVftbA', 'https://www.youtube.com/watch?v=WIFvInRA2xQ', 'https://www.youtube.com/watch?v=HkmlfHi9Ll4', 'https://www.youtube.com/watch?v=DHXBacEH0qo', 'https://www.youtube.com/watch?v=90IJanuV_0M', 'https://www.youtube.com/watch?v=3yEP4ooj1WI', 'https://www.youtube.com/watch?v=BA2qJKU8t2k', 'https://www.youtube.com/watch?v=Qy81O7LrB84', 'https://www.youtube.com/watch?v=DGAPEIxTwU4', 'https://www.youtube.com/watch?v=fp6jW8G2u7E'];
+
+        return null;
+    }
+}
 
 
-export default {TestValsE, TestVals1, TestVals2, TestVals3};
+
+export default {TestVals3, TestVals3E};

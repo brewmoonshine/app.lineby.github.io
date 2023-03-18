@@ -33,7 +33,7 @@ function TopBar () {
     const [showAcc, setAccShow] = React.useState(false);
     const [showLvl, setLvlShow] = React.useState(false); 
 
-    const section = {width: '100vw', height: '4.25vh', padding: '0.5%'}    
+    const section = {width: '100%', height: '4.25vh', padding: '0.5%'}    
     return <>
         <div style={section} className='d-flex flex-row justify-content-between'>
             <button style={svg_button}>

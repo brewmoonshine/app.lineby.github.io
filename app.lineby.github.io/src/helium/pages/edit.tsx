@@ -1,7 +1,15 @@
+// External
 import React from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, Modal, ButtonGroup, ToggleButton, Dropdown, Form, InputGroup} from 'react-bootstrap';
 import ReactPlayer from "react-player/lazy";
+import {ContentState, Editor, EditorState} from 'draft-js';
+import 'draft-js/dist/Draft.css';
+
+
+// Internal
+import VidPlayer from "../components/VidPlayer";
+import MenuGroup from "../components/MenuGroup";
 
 import TopBar from "../components/topbar";
 import Thumbnail from '../components/thumbNailComp';
@@ -10,7 +18,8 @@ import TimelineEditor from "../components/timelineEditComp";
 import TranscriptEditor from "../components/transcriptEditComp";
 import VideoBrowser from "../components/videoBrowserComp";
 
-import { MdVideoSettings } from 'react-icons/md';
+// Icons
+import { MdVideoSettings, MdMenu, MdMenuOpen, MdOutlineAccountCircle } from 'react-icons/md';
 
 // CSS
 import '../../css/HeliumApp.css'
@@ -22,7 +31,14 @@ import Cust_Save_Icon from '../../img/cust_save_icon.svg'
 
 
 
-function Header() {
+const Header: React.FunctionComponent<{mobile: boolean}> = props => {
+    var section = {}
+    if (props.mobile == true) {
+        section = {width:'90.5vw', position:'absolute'}
+    } else {
+        section = {width:'47vw', position:'absolute'}
+    }
+
     const [title, setTitle] = React.useState('');
     const [desc, setDesc] = React.useState('');
     const [scriptMode, setScriptMode] = React.useState(false)
@@ -53,7 +69,7 @@ function Header() {
     }
 
     return <>
-        <div className="headerBox" style={{width:'47vw', position:'absolute'}}>
+        <div className="headerBox" style={section}>
             <div className=" headerBox_title d-flex flex-row justify-content-between">
                 <input 
                     className='headerBox_title_text' 
@@ -104,6 +120,7 @@ function NewQueryBox() {
     const [query, setQuery] = React.useState('');
     const [showTSearch, setShowTSearch] = React.useState(false);
     const [showMSearch, setShowMSearch] = React.useState(false);
+    const [vid, setVid] = React.useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
@@ -153,25 +170,24 @@ function NewQueryBox() {
         <div style={bufferSpace}/>
 
         <Modal show={showTSearch} onHide={() => setShowTSearch(false)} centered fullscreen>
-            <Modal.Header closeButton>
-            </Modal.Header>
-            <Modal.Body className='d-flex flex-column' style={{height:'50vh'}}>
-                <VideoBrowser source={global.ProjMedia}/>
-            </Modal.Body>
+            <TranscriptEditor source={global.ProjMedia}/>
         </Modal>
 
         <Modal show={showMSearch} onHide={() => setShowMSearch(false)} centered fullscreen>
             <Modal.Header closeButton>
+                Manual Search: Select video to search
             </Modal.Header>
-            <Modal.Body className='d-flex flex-column' style={{height:'50vh'}}>
-                <VideoBrowser source={global.ProjMedia}/>
+            <Modal.Body className='d-flex flex-column'>
+                <VideoBrowser source={global.ProjMedia} exit={setVid}/>
             </Modal.Body>
         </Modal>
     </>
 }
 
 function QueryBox (currQuery: string, Results: Array<number>) {
-    const [query, setQuery] = React.useState(currQuery)
+    const [query, setQuery] = React.useState(currQuery);
+    const [seeMore, setSeeMore] = React.useState(false);
+    const [vid, setVid] = React.useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
@@ -184,10 +200,14 @@ function QueryBox (currQuery: string, Results: Array<number>) {
         }
     }
 
+    function selectVid (source: string) {
+        setVid(source)
+    }
+
     var ReturnArr: Array<JSX.Element> = [];
     
     for (var idx in Results) {
-        ReturnArr.push(<><Thumbnail.Thumbnail heightPoint={120} source={global.AllMedia[Results[idx]]}/></>)
+        ReturnArr.push(<><Thumbnail.Thumbnail heightPoint={100} source={global.AllMedia[Results[idx]]}/></>)
     } 
 
     const bufferSpace = {height:'2vh'}
@@ -217,13 +237,22 @@ function QueryBox (currQuery: string, Results: Array<number>) {
                     <div style={{width:'90%', overflow:'hidden'}} className="queryBox_searchResults d-flex flex-row ">
                         <div className="d-flex flex-row" style={{overflow:'scroll', width:'100%'}}>
                             {ReturnArr}
-                            <Button style={{alignSelf:'center', margin:'1%', fontSize:'12px'}}>Try Again</Button>
+                            <Button onClick={() => setSeeMore(true)} style={{alignSelf:'center', margin:'1%', fontSize:'12px'}}>See More</Button>
                         </div> 
                     </div>
                 </div>
             </div>
         </div>
         <div style={bufferSpace}/>
+
+        <Modal show={seeMore} onHide={() => setSeeMore(false)} centered fullscreen>
+            <Modal.Header closeButton>
+                More Options For: {query}
+            </Modal.Header>
+            <Modal.Body className='d-flex flex-column'>
+                <VideoBrowser source={global.ProjMedia} exit={setVid}/>
+            </Modal.Body>
+        </Modal>
     </>
 }
 
@@ -257,12 +286,27 @@ function QueryBoxTimeline(currQuery: string, vidLenSec: number) {
     }
 
     const bufferSpace = {height:'2vh'}
-    const test_rect = {height:'100%', width:'7vw', background:'#000000'}
+    const timeline = {height:'100%', width:'7vw', overflow:'hidden'}
+
+    const heightpx = window.innerHeight*(heightvh/100);
+    const timelinewidthpx = window.innerWidth*(7/100);
+    const timeline_imgheightpx = (9/16)*timelinewidthpx;
+    const num_img = Math.floor(heightpx/timeline_imgheightpx)+1;
+
+    let imgArr: Array<JSX.Element> = [];
+
+    for (var i=0; i<num_img; i++) {
+        imgArr.push(<>
+            <div style={{width:`${timelinewidthpx}px`, height:`${timeline_imgheightpx}px`}}>
+                <p>{i}</p>
+            </div> 
+        </>)
+    }
 
     return <>
         <div className="section_box_spec d-flex flex-row justify-content-between" style={{height:`${heightvh}vh`}}>
-            <div style={test_rect}>
-
+            <div className="d-flex flex-column" style={timeline}>
+                {imgArr}
             </div>
 
             <div style={{width:'100%', alignSelf:'flex-start', padding:'2%'}}>
@@ -312,68 +356,6 @@ function QueryBoxTimeline(currQuery: string, vidLenSec: number) {
     </>
 }
 
-// OBSOLETE: see QueryState3 and QueryManager3
-/*
-function QueryState(qid: number) {
-    var QID = qid
-    var QT: string = global.QueryText[qid];
-    var FP: string = global.SelQuFilePath[qid];
-    var FNs: [number, number] = global.FrameNums[qid]
-
-    if (QT != global.escapeCode) {
-        if (FP != global.escapeCode) {
-            return <>{QueryBoxTimeline(QT, (FNs[1]-FNs[0]), QID.toString())}</>
-        } else {
-            return <>{QueryBox(QT, global.LastSearchRes, QID.toString())}</>
-        }
-    } else {
-        return <>{NewQueryBox()}</>
-    }
-}
-function QueryManager() {
-    let ReturnArr: Array<JSX.Element> = []
-
-    for (let i = 0; i < global.QueryId.length; i++) {
-        ReturnArr.push(QueryState(i))
-    }
-
-    return <>
-        {ReturnArr}
-    </>
-}
-function QueryState2(query: [number, string, string, [number, number]]) {
-    var QID = query[0];
-    var QT = query[1]; 
-    var FP = query[2];
-    var FNs = query[3];
-
-    if (QT != global.escapeCode) {
-        if (FP != global.escapeCode) {
-            return <>{QueryBoxTimeline(QT, (FNs[1]-FNs[0]), QID.toString())}</>
-        } else {
-            return <>{QueryBox(QT, global.LastSearchRes, QID.toString())}</>
-        }
-    } else {
-        return <>{NewQueryBox()}</>
-    }
-}
-function QueryManager2() {
-    let ReturnArr: Array<JSX.Element> = [];
-    let KeyArr: Array<number> = [];
-
-    for (let i = 0; i < global.Query.length; i++) {
-        var query = global.Query[i];
-        var key = query[0];
-        ReturnArr.push(QueryState2(query));
-        KeyArr.push(key);
-    }
-
-    return <>
-        {ReturnArr}
- 
-    </>
-}
-*/
 
 const QueryState3: React.FunctionComponent<{query: [number, string, string, [number, number]], key: number}> = props => {
     var QT = props.query[1]; 
@@ -407,23 +389,50 @@ function QueryManager3() {
 }
 
 function ScriptEditor() {
+    /* Script Mode:
+    Queries that have been run and editied: Green highlight
+    Queries that have been run: Orange highlight
+    Queries that have not yet been run: no highlight
     
+    */
+    function getQueries() {
+        var query_string: string = '';
+        for (var query in global.Query) {
+            query_string.concat(query_string, query[1]);
+            query_string.concat(query_string, '\n');
+        }
+        return query_string;
+    } 
+
+    // TODO: This doesnt seem to work?
+    const [editorState, setEditorState] = React.useState(
+        () => EditorState.createWithContent(
+            ContentState.createFromText(getQueries())
+        )
+    )
+
     return <>
-        <div className="section_box_spec" style={{height:'92.5%', width:'100%'}}>
+        <div className="section_box_spec" style={{height:'94%', width:'100%', padding:'1.5%'}}>
+            <Editor editorState={editorState} onChange={setEditorState} />
         </div>
     </>
 }
 
 
-function VertTimeLine () {
-    const section = {width: '50vw', height:'95.75vh', padding:'0.5%'}
+const VertTimeLine: React.FunctionComponent <{mobile: boolean}> = props => {
+    var section = {}
+    if (props.mobile == true) {
+        section = {width:'100%', height:'100vh', padding:'0.5%'}
+    } else {
+        section = {width: '50vw', height:'100vh', padding:'0.5%'}
+    }
     const bufferSpace = {height:'6vh'}
 
     if (global.ScriptQueryViewMode == true) {
         return <>
             <div style={section}>
                 <div className="section_box" style={{height:'100%', width:'100%', padding:'2% 2% 2% 2%'}}>
-                    <Header/>
+                    <Header mobile={props.mobile}/>
                     <div style={bufferSpace}/>
                         <ScriptEditor />
                 </div>
@@ -433,7 +442,7 @@ function VertTimeLine () {
         return <>
             <div style={section}>
                 <div className="section_box" style={{height:'100%', width:'100%', padding:'2% 2% 2% 2%'}}>
-                    <Header/>
+                    <Header mobile={props.mobile}/>
                     <div style={bufferSpace}/>
                     <QueryManager3 />
                     <div style={bufferSpace}/>
@@ -444,167 +453,55 @@ function VertTimeLine () {
 }
 
 
-function VidPlayer () {
-    const section = {width: '50vw', height:'61vh', padding:'1%'}
+function MobileEdit() {
+    const vertTimeLine = {width:'95vw', height:'100v'};
+    const testR2 = {height:'50vh'};
+    const testR3 = {height:'50vh'};
 
-    const [heightRat, setHeightRat] = React.useState(9);
-    const [widthRat, setWidthRat] = React.useState(16);
-    const heightpx = document.documentElement.clientHeight*0.45
-    const widthpx = (widthRat/heightRat)*heightpx;
-
-    const [vidSpeed, setVidSpeed] = React.useState(1);
-    const [volume, setVolume] = React.useState(1);
-    const [loop, setLoop] = React.useState(false)
-
-    function setAspectRatio(h: number, w: number) {
-        setHeightRat(h)
-        setWidthRat(w)
-    }
-
-    function SideMenu () {
-        return <>
-            <div className="vid_side_menu" style={{zIndex:'2', position:'absolute', overflow:'hidden'}}>
-                <div className="d-flex flex-row" style={{width:'35px', height:'35px', padding:'0 0 0 10px'}}>
-                    <MdVideoSettings className="vid_side_menu_icon" style={{alignSelf:'center'}}/>
-                </div>
-                
-                <div style={{padding:'3%'}}>
-                    <div className="d-flex flex-row">
-                        <Dropdown>
-                            <Dropdown.Toggle id='aspectR' style={{alignSelf:'center'}}>Aspect Ratio</Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => setAspectRatio(9, 16)}>16:9</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setAspectRatio(16, 9)}>9:16</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setAspectRatio(3, 4)}>4:3</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setAspectRatio(1,1)}>1:1</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        <div style={{width:'5%'}}/>
-                        <Dropdown>
-                            <Dropdown.Toggle id='speed' style={{alignSelf:'center'}}>Speed</Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => setVidSpeed(0.25)}>x0.25</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setVidSpeed(0.5)}>x0.5</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setVidSpeed(1)}>x1.0</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setVidSpeed(1.25)}>x1.25</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setVidSpeed(1.5)}>x1.5</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setVidSpeed(2)}>x2.0</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
-
-                    <div style={{height:'12px'}}/>
-
-                    <div>
-                        <p style={{color:'#1a1b25'}}>Volume</p>
-                        <Form.Range
-                            min={0}
-                            max={1}
-                            step={0.05}
-                            defaultValue={volume} 
-                        />
-                    </div>
-
-                    <div className="d-flex flex-row">
-                        <p style={{color:'#1a1b25', margin:'0 1% 0 0'}}>Loop</p>
-                        <Form.Check
-                            type='switch'
-                            onChange={() => setLoop(!loop)}
-                        />
-                    </div>
-
-                </div>
-            </div>
-        </>
-    }
-
-    return <>
-        <div style={section}>
-            <div className="section_box d-flex flex-row" style={{height:'100%', width:'100%', background:'#1A1B25'}}>
-                {SideMenu()}
-                <div className="view_port d-flex flex-column" style={{zIndex:'1', height:'100%', width:'100%', padding:'1%'}}>
-                    <ReactPlayer url='https://www.youtube.com/watch?v=QH2-TGUlwu4' width={widthpx} height={heightpx} style={{alignSelf:'center'}}/>
-                    
-                    <ButtonGroup style={{alignSelf:'center', width:'30%', margin:'1%'}}>
-                        <Button variant='success'>Start</Button>
-                        <Button variant='danger'>Stop</Button>
-
-                    </ButtonGroup>
-                </div>
-            </div>
-        </div>
-    </>
-}
-
-/*
-    function SideMenu () {
-        return <>
-            <div className="vid_side_menu" style={{zIndex:'2', position:'absolute',}}></div>
-        </>
-    }
-
-    function VidPlay_ToolBar() {
-        return <>
-            <div className="d-flex flex-column" style={{zIndex:'1', height:'100%', width:'100%'}}>
-                <ReactPlayer url='https://www.youtube.com/watch?v=QH2-TGUlwu4' width={widthpx} height={heightpx} style={{alignSelf:'flex-end'}}/>
-                
-                <ButtonGroup style={{alignSelf:'flex-end', width:'30%', margin:'1%'}}>
-                    <Button variant='success'>Start</Button>
-                    <Button variant='danger'>Stop</Button>
-                    <Dropdown>
-                        <Dropdown.Toggle id='aspectR' style={{alignSelf:'flex-start', margin:'2%'}}>Aspect Ratio</Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            <Dropdown.Item onClick={() => setAspectRatio(9, 16)}>16:9</Dropdown.Item>
-                            <Dropdown.Item onClick={() => setAspectRatio(16, 9)}>9:16</Dropdown.Item>
-                            <Dropdown.Item onClick={() => setAspectRatio(3, 4)}>4:3</Dropdown.Item>
-                            <Dropdown.Item onClick={() => setAspectRatio(1,1)}>1:1</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </ButtonGroup>
-            </div>
-        </>
-    }
-
-    return <>
-        <div style={section}>
-            <div className="section_box d-flex flex-row" style={{height:'100%', width:'100%', background:'#1A1B25'}}>
-                {SideMenu()}
-                {VidPlay_ToolBar()}
-            </div>
-        </div>
-    </>
-*/
-
-
-function MenuGroup () {
-    const section = {width: '50vw',height:'34.5vh', padding:'1%'}
-
-    return <>
-        <div style={section}>
-            <div className="section_box d-flex flex-row" style={{height:'100%', width:'100%'}}>
-                <div className="sideMenu">
-                </div>
-            </div>
-        </div>
-    </>
-}
-
-
-function Edit () {
     return <>
         <Row className="g-0">
             <Col>
-                <TopBar/>
                 <Row className="g-0">
-                    <VertTimeLine/>
+                    <div style={vertTimeLine}>
+                        <VertTimeLine mobile={true}/>
+                    </div>
                     <Col>
-                        <VidPlayer/>
-                        <MenuGroup/>
+                        <div className="r_side_menu" style={testR2}>
+                            <VidPlayer />
+                        </div>
+                        <div className="r_side_menu" style={testR3}>
+                            <MenuGroup />
+                        </div>
                     </Col>
                 </Row>
             </Col>
         </Row>
     </>
+}
+
+
+function Edit () {
+    if (global.mobile == true) {
+        return <>
+            <MobileEdit />
+        </>
+    } else {
+        return <>
+            <Row className="g-0">
+                <Col>
+                    <Row className="g-0">
+                        <VertTimeLine mobile={false}/>
+                        <Col>
+                            <VidPlayer/>
+                            <MenuGroup/>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
+        </>
+    }
+
+
 }
 
 export default Edit;

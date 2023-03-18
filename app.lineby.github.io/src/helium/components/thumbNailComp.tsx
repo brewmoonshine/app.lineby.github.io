@@ -15,7 +15,8 @@ const Thumbnail_select: React.FunctionComponent<{heightPoint: number, source: st
         width:`${widthpx}px`, 
         margin:'2%' ,
         background:'#000000',
-        borderRadius:'10px'
+        borderRadius:'10px',
+        overflow: 'hidden'
     }
 
     function clickOn(source: string) {
@@ -23,7 +24,8 @@ const Thumbnail_select: React.FunctionComponent<{heightPoint: number, source: st
     }
 
     return <>
-        <div className='thumbnail' style={test_rect} onClick={() => clickOn(props.source)}>
+        <div className='thumbnail d-flex flex-row' style={test_rect} onClick={() => clickOn(props.source)}>
+            <ReactPlayer url={props.source} height={props.heightPoint} width={widthpx} light controls={false}/>
         </div>    
     </>
 }
@@ -95,7 +97,8 @@ const Thumbnail: React.FunctionComponent<{heightPoint: number, source: string}> 
         width:`${widthpx}px`, 
         margin:'1%' ,
         background:'#000000',
-        borderRadius:'10px'
+        borderRadius:'10px',
+        overflow:'hidden'
     }
 
     function chooseVid(fp: string, fn: [number, number]) {
@@ -104,7 +107,9 @@ const Thumbnail: React.FunctionComponent<{heightPoint: number, source: string}> 
     }
 
     return <>
-        <div className='thumbnail' style={test_rect} onClick={() => setShowVid(true)}></div>
+        <div className='thumbnail d-flex flex-row' style={test_rect} onClick={() => setShowVid(true)}>
+            <ReactPlayer url={props.source} height={props.heightPoint} width={widthpx} light controls={false}/>
+        </div>  
 
         <Modal className='modal-xl' show={showVid} onHide={() => setShowVid(false)} centered>
             <Modal.Header closeButton>

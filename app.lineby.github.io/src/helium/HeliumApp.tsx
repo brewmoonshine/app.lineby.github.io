@@ -13,6 +13,14 @@ import '../css/custom.min.css';
 
 
 function App () {
+    if (window.innerWidth < 1440) {
+        global.mobile = true;
+    } else {
+        global.mobile = false;
+    }
+
+    //global.mobile = true;
+
     return <>
         <TestVals.TestVals3 />
         <Edit />
