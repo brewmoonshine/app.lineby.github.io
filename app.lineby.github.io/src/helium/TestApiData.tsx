@@ -15,6 +15,7 @@ declare global {
     // Session Data
     var mobile: boolean;
     var ScriptQueryViewMode: boolean;
+    var openProject: string;
 }
 
 /* Obsolete test data 
@@ -83,10 +84,54 @@ class TestVals3 extends React.Component {
 
         global.LastSearchRes = [1,2,3]
         global.ProjMedia = [1,3,4,6,7];
-        global.AllMedia = ['https://www.youtube.com/watch?v=fJ-QUDsRiJY', 'https://www.youtube.com/watch?v=_wIOqHSsV9c', 'https://www.youtube.com/watch?v=56K7rfVftbA', 'https://www.youtube.com/watch?v=WIFvInRA2xQ', 'https://www.youtube.com/watch?v=HkmlfHi9Ll4', 'https://www.youtube.com/watch?v=DHXBacEH0qo', 'https://www.youtube.com/watch?v=90IJanuV_0M', 'https://www.youtube.com/watch?v=3yEP4ooj1WI', 'https://www.youtube.com/watch?v=BA2qJKU8t2k', 'https://www.youtube.com/watch?v=Qy81O7LrB84', 'https://www.youtube.com/watch?v=DGAPEIxTwU4', 'https://www.youtube.com/watch?v=fp6jW8G2u7E'];
+        global.AllMedia = [
+            'https://www.youtube.com/watch?v=fJ-QUDsRiJY', 
+            'https://www.youtube.com/watch?v=_wIOqHSsV9c', 
+            'https://www.youtube.com/watch?v=56K7rfVftbA', 
+            'https://www.youtube.com/watch?v=WIFvInRA2xQ', 
+            'https://www.youtube.com/watch?v=HkmlfHi9Ll4', 
+            'https://www.youtube.com/watch?v=DHXBacEH0qo', 
+            'https://www.youtube.com/watch?v=90IJanuV_0M', 
+            'https://www.youtube.com/watch?v=3yEP4ooj1WI', 
+            'https://www.youtube.com/watch?v=BA2qJKU8t2k', 
+            'https://www.youtube.com/watch?v=Qy81O7LrB84', 
+            'https://www.youtube.com/watch?v=DGAPEIxTwU4', 
+            'https://www.youtube.com/watch?v=fp6jW8G2u7E'
+        ];
 
         return null;
     }
+}
+
+class TestVals3v1 extends React.Component {
+    render () {
+        global.openProject = 'NyanCat'
+        global.Query = [
+            [0, '60 frames', 'filepath', [0, 60]],
+            [1, '10 frames', 'filepath', [120, 130]], 
+            [2, 'Nyan Cat', global.escapeCode, [0,0]],
+            [3, 'More Nayn Cat', global.escapeCode, [0,0]],
+        ]
+        global.NextID = 0;
+
+        global.LastSearchRes = [1,2,3]
+        global.ProjMedia = [1,3,4,6,7];
+        global.AllMedia = [
+            'C:/Users/ganesh/workspaces/Test/test_vid/0.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/1.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/2.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/3.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/4.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/5.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/6.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/7.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/8.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/9.mp4',
+            'C:/Users/ganesh/workspaces/Test/test_vid/10.mp4',
+        ];
+
+        return null;
+    }  
 }
 
 class TestVals3E extends React.Component {
@@ -97,7 +142,20 @@ class TestVals3E extends React.Component {
 
         global.LastSearchRes = [1,2,3]
         global.ProjMedia = [1,3,4,6,7];
-        global.AllMedia = ['https://www.youtube.com/watch?v=fJ-QUDsRiJY', 'https://www.youtube.com/watch?v=_wIOqHSsV9c', 'https://www.youtube.com/watch?v=56K7rfVftbA', 'https://www.youtube.com/watch?v=WIFvInRA2xQ', 'https://www.youtube.com/watch?v=HkmlfHi9Ll4', 'https://www.youtube.com/watch?v=DHXBacEH0qo', 'https://www.youtube.com/watch?v=90IJanuV_0M', 'https://www.youtube.com/watch?v=3yEP4ooj1WI', 'https://www.youtube.com/watch?v=BA2qJKU8t2k', 'https://www.youtube.com/watch?v=Qy81O7LrB84', 'https://www.youtube.com/watch?v=DGAPEIxTwU4', 'https://www.youtube.com/watch?v=fp6jW8G2u7E'];
+        global.AllMedia = [
+            'https://www.youtube.com/watch?v=fJ-QUDsRiJY', 
+            'https://www.youtube.com/watch?v=_wIOqHSsV9c', 
+            'https://www.youtube.com/watch?v=56K7rfVftbA', 
+            'https://www.youtube.com/watch?v=WIFvInRA2xQ', 
+            'https://www.youtube.com/watch?v=HkmlfHi9Ll4', 
+            'https://www.youtube.com/watch?v=DHXBacEH0qo', 
+            'https://www.youtube.com/watch?v=90IJanuV_0M', 
+            'https://www.youtube.com/watch?v=3yEP4ooj1WI', 
+            'https://www.youtube.com/watch?v=BA2qJKU8t2k', 
+            'https://www.youtube.com/watch?v=Qy81O7LrB84', 
+            'https://www.youtube.com/watch?v=DGAPEIxTwU4', 
+            'https://www.youtube.com/watch?v=fp6jW8G2u7E'
+        ];
 
         return null;
     }
@@ -105,4 +163,4 @@ class TestVals3E extends React.Component {
 
 
 
-export default {TestVals3, TestVals3E};
+export default {TestVals3, TestVals3E, TestVals3v1};

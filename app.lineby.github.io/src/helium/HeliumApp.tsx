@@ -21,8 +21,10 @@ function App () {
 
     //global.mobile = true;
 
+    React.useEffect(() => {document.title = global.openProject.concat(" | Moonshine")}, []) 
+
     return <>
-        <TestVals.TestVals3 />
+        <TestVals.TestVals3v1 />
         <Edit />
     </>
 

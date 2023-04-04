@@ -13,7 +13,7 @@ import MenuGroup from "../components/MenuGroup";
 
 import TopBar from "../components/topbar";
 import Thumbnail from '../components/thumbNailComp';
-import EditBox from '../components/editComp';
+import EditComp from '../components/editComp';
 import TimelineEditor from "../components/timelineEditComp";
 import TranscriptEditor from "../components/transcriptEditComp";
 import VideoBrowser from "../components/videoBrowserComp";
@@ -39,7 +39,7 @@ const Header: React.FunctionComponent<{mobile: boolean}> = props => {
         section = {width:'47vw', position:'absolute'}
     }
 
-    const [title, setTitle] = React.useState('');
+    const [title, setTitle] = React.useState(global.openProject);
     const [desc, setDesc] = React.useState('');
     const [scriptMode, setScriptMode] = React.useState(false)
     global.ScriptQueryViewMode = scriptMode;
@@ -50,6 +50,7 @@ const Header: React.FunctionComponent<{mobile: boolean}> = props => {
     const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             setTitle(title);
+            global.openProject = title;
             console.log(''.concat('Title:', title))
         }
     }
@@ -68,6 +69,7 @@ const Header: React.FunctionComponent<{mobile: boolean}> = props => {
         global.ScriptQueryViewMode = mode;
     }
 
+    
     return <>
         <div className="headerBox" style={section}>
             <div className=" headerBox_title d-flex flex-row justify-content-between">
@@ -204,11 +206,14 @@ function QueryBox (currQuery: string, Results: Array<number>) {
         setVid(source)
     }
 
+    /*
     var ReturnArr: Array<JSX.Element> = [];
     
     for (var idx in Results) {
         ReturnArr.push(<><Thumbnail.Thumbnail heightPoint={100} source={global.AllMedia[Results[idx]]}/></>)
+        console.log('result')
     } 
+    */
 
     const bufferSpace = {height:'2vh'}
     
@@ -236,7 +241,9 @@ function QueryBox (currQuery: string, Results: Array<number>) {
                     </Dropdown>
                     <div style={{width:'90%', overflow:'hidden'}} className="queryBox_searchResults d-flex flex-row ">
                         <div className="d-flex flex-row" style={{overflow:'scroll', width:'100%'}}>
-                            {ReturnArr}
+                            <div style={{height:'100px', width:'177px', background:'#F00', margin:'1%'}}>I need</div>
+                            <div style={{height:'100px', width:'177px', background:'#0F0', margin:'1%'}}>to fix</div>
+                            <div style={{height:'100px', width:'177px', background:'#00F', margin:'1%'}}>this</div>
                             <Button onClick={() => setSeeMore(true)} style={{alignSelf:'center', margin:'1%', fontSize:'12px'}}>See More</Button>
                         </div> 
                     </div>
@@ -325,8 +332,8 @@ function QueryBoxTimeline(currQuery: string, vidLenSec: number) {
                     <Button onClick={() => setShowEdit(true)} style={{alignSelf:'flex-start', margin:'1%'}}>Edit</Button>
                     <div className="d-flex flex-column" style={{height:'100%', width:'100%'}}>
                         <div style={{alignSelf:'center', overflowY:'scroll', width:'25vw'}}>
-                            <EditBox/>
-                            <EditBox/>
+                            <EditComp.LayerBox/>
+                            <EditComp.LayerBox/>
                         </div>
                     </div>
                 </div>
@@ -334,14 +341,13 @@ function QueryBoxTimeline(currQuery: string, vidLenSec: number) {
         </div>
         <div style={bufferSpace}/>
 
-        <Modal show={showEdit} onHide={() => setShowEdit(false)} size='lg' centered>
-            <Modal.Header closeButton> </Modal.Header>
+        <Modal show={showEdit} onHide={() => setShowEdit(false)} size='lg' centered fullscreen>
+            <Modal.Header closeButton>
+                Edit the clip found for: {currQuery}
+            </Modal.Header>
             <Modal.Body>
-                <p>Clip editor</p>
+                <EditComp.EditPage/>
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={() => setShowEdit(false)}>Close</Button>
-            </Modal.Footer>
         </Modal>
 
         <Modal show={showWarn} onhide={() => setShowWarn(false)} centered>
@@ -426,7 +432,7 @@ const VertTimeLine: React.FunctionComponent <{mobile: boolean}> = props => {
     } else {
         section = {width: '50vw', height:'100vh', padding:'0.5%'}
     }
-    const bufferSpace = {height:'6vh'}
+    const bufferSpace = {height:'6.5vh'}
 
     if (global.ScriptQueryViewMode == true) {
         return <>
@@ -467,7 +473,7 @@ function MobileEdit() {
                     </div>
                     <Col>
                         <div className="r_side_menu" style={testR2}>
-                            <VidPlayer />
+                            <VidPlayer.HomeVidPlayer />
                         </div>
                         <div className="r_side_menu" style={testR3}>
                             <MenuGroup />
@@ -492,7 +498,7 @@ function Edit () {
                     <Row className="g-0">
                         <VertTimeLine mobile={false}/>
                         <Col>
-                            <VidPlayer/>
+                            <VidPlayer.HomeVidPlayer/>
                             <MenuGroup/>
                         </Col>
                     </Row>

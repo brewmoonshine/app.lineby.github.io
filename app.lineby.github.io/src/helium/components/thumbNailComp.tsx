@@ -25,6 +25,7 @@ const Thumbnail_select: React.FunctionComponent<{heightPoint: number, source: st
 
     return <>
         <div className='thumbnail d-flex flex-row' style={test_rect} onClick={() => clickOn(props.source)}>
+            <div style={{height:`${props.heightPoint}px`, width:`${widthpx}px`, position:'absolute'}}/> 
             <ReactPlayer url={props.source} height={props.heightPoint} width={widthpx} light controls={false}/>
         </div>    
     </>
@@ -108,6 +109,7 @@ const Thumbnail: React.FunctionComponent<{heightPoint: number, source: string}> 
 
     return <>
         <div className='thumbnail d-flex flex-row' style={test_rect} onClick={() => setShowVid(true)}>
+            <div style={{height:`${props.heightPoint}px`, width:`${widthpx}px`, position:'absolute'}}/> 
             <ReactPlayer url={props.source} height={props.heightPoint} width={widthpx} light controls={false}/>
         </div>  
 

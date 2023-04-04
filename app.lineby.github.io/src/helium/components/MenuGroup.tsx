@@ -5,6 +5,10 @@ import ReactPlayer from "react-player/lazy";
 import {ContentState, Editor, EditorState} from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
+// Internal
+import Thumbnail from "./thumbNailComp";
+import ProjectItem from "./projectComp";
+
 // Icons
 import { MdVideoSettings, MdMenu, MdMenuOpen, MdOutlineAccountCircle } from 'react-icons/md';
 
@@ -18,54 +22,77 @@ import '../../css/custom.min.css';
 function MenuGroup () {
     const widthvw = window.innerWidth*0.5;
     const heightvh = window.innerHeight*0.3875;
-    const section = {width: `${widthvw}px`, height:'100%', padding:'1%'}
-    const [menuSelect, setMenuSelect] = React.useState('home')
+    const section = {width: `${widthvw}px`, height:`${heightvh}px`, padding:'1%'}
+    const [menuSelect, setMenuSelect] = React.useState(<><Home/></>)
+    
+
+    function Account () {
+        return <>
+            <div className="menuPage">
+                <div style={{padding:'1%'}} className="d-flex flex-row">
+                    <p style={{fontWeight:'600', fontSize:'20px'}}>Account</p>
+                </div>
+            </div>
+        </>
+    }
 
     function Home () {
-            
-        const [showAcc, setAccShow] = React.useState(false);
-        const [showLvl, setLvlShow] = React.useState(false); 
-
-        function AccountInfo() {
-            return <>
-                <p>Hello!</p>
-            </>
+        const [showEdit, setShowEdit] = React.useState(false);
+        
+        let ReturnArr: Array<JSX.Element> = [];
+        let HP = 81;
+        
+        for (var fp in global.ProjMedia) {
+            ReturnArr.push(<><Thumbnail.Thumbnail heightPoint={HP} source={global.AllMedia[global.ProjMedia[fp]]}/></>)
         }
 
-        function LevelInfo() {
-            return <>
-                <p>Hello!</p>
-            </>
-        }
+        // <Thumbnail.Thumbnail_multi_select heightPoint={100} source="" display={} remove={}/>
 
         return <>
             <div className="menuPage">
-                <div style={{padding:'1.5%'}} className="d-flex flex-row-reverse">
-                    <MdOutlineAccountCircle style={{scale:'3'}} onClick={() => setAccShow(true)}/>
+                <div className="d-flex flex-row justify-content-between">
+                    <div className="section_box_spec d-flex flex-row" style={{padding:'1.5%', margin:'2% 0 2% 2%', width:'40%'}}>
+                        <p style={{fontWeight:'600', fontSize:'18px'}}>Project Settings</p>
+                    </div>
+                    <div className="section_box_spec d-flex flex-column" style={{width:'60%', height:`34vh`, padding:'1%', margin:'2%'}}>
+                        <div className="d-flex flex-row justify-content-between" style={{padding:'1%'}}>
+                            <p style={{fontWeight:'600', fontSize:'18px'}}>Project Media</p>
+                            <Button onClick={() => setShowEdit(true)}>Edit</Button>
+                        </div>
+                        <div className="d-flex flex-row flex-wrap" style={{overflow:'scroll'}}>
+                            {ReturnArr}
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <Modal show={showAcc} onHide={() => setAccShow(false)} size='lg' centered>
+            <Modal className='modal-xl' show={showEdit} onHide={() => setShowEdit(false)} centered fullscreen>
                 <Modal.Header closeButton>
-                    <Modal.Title>Account Information</Modal.Title>
+                    Add and remove media from your project
                 </Modal.Header>
-                <Modal.Body>
-                    <AccountInfo/>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setAccShow(false)}>Close</Button>
-                </Modal.Footer>
-            </Modal>
+                <Modal.Body className='d-flex flex-row justify-content-between' style={{padding:'1%'}}>
+                    <div className="section_box d-flex flex-column justify-content-between" style={{padding:'1%', width:'49.5%'}}>
+                        <div>
+                            <p>My Media</p>
+                        </div>
+                        <div>
+                            <Button>Add</Button>
+                        </div>
+                    </div>
+                    <div className="section_box d-flex flex-column justify-content-between" style={{padding:'1%', width:'49.5%'}}>
+                        <div>
+                            <p>Project Media</p>
+                            <div className="d-flex flex-row flex-wrap" style={{overflow:'scroll'}}>
 
-            <Modal show={showLvl} onHide={() => setLvlShow(false)} size='lg' centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>You're Pro!</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <LevelInfo/>
+                            </div>
+                        </div>
+                        <div>
+                            <Button>Remove</Button>
+                        </div>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setLvlShow(false)}>Close</Button>
+                    <Button variant="secondary" onClick={() => setShowEdit(false)}>Save</Button>
                 </Modal.Footer>
             </Modal>
         </>
@@ -74,7 +101,14 @@ function MenuGroup () {
     function Projects () {
         return <>
             <div className="menuPage">
-                <p>Projects</p>
+                <div style={{padding:'1.5%'}} className="d-flex flex-column">
+                    <p style={{fontWeight:'600', fontSize:'18px'}}>Projects</p>
+                    <div className="d-flex flex-row flex-wrap" style={{overflow:'scroll'}}>
+                        <div/>
+                        <ProjectItem projName="Test" HP={100}/>
+                        <ProjectItem projName="Test" HP={100}/>
+                    </div> 
+                </div>
             </div>
         </>
     }
@@ -82,7 +116,9 @@ function MenuGroup () {
     function Media () {
         return <>
             <div className="menuPage">
-                <p>Media</p>
+                <div style={{padding:'1%'}} className="d-flex flex-row">
+                    <p style={{fontWeight:'600', fontSize:'20px'}}>Media</p>
+                </div>
             </div>
         </>
     }
@@ -90,24 +126,14 @@ function MenuGroup () {
     function Objects () {
         return <>
             <div className="menuPage">
-                <p>Objects</p>
+                <div style={{padding:'1%', height:'100%', width:'100%'}} className="d-flex flex-column">
+                    <div style={{height:'45%'}}/>
+                    <p style={{fontWeight:'400', fontSize:'16px', alignSelf:'center'}}>New feature coming soon...</p>
+                </div>
             </div>
         </>
     }
 
-    function MenuShown () {
-        if (menuSelect == 'home') {
-            return <> <Home /> </>
-        } else if (menuSelect == 'projects') {
-            return <> <Projects /> </>
-        } else if (menuSelect == 'media') {
-            return <> <Media/> </>
-        } else if (menuSelect == 'objects') {
-            return <> <Objects /> </>
-        } else {
-            return <> <Home/> </>
-        }
-    }
 
     function SideMenu() {
         return <>
@@ -115,26 +141,33 @@ function MenuGroup () {
                 <div className="d-flex flex-column" style={{padding:'15px', height:'100%', alignSelf:'center'}}>
                     <MdMenuOpen style={{color:'#FFF', scale:'2'}}/>
                 </div>
-                <div style={{height:'100%'}} className="d-flex flex-column justify-content-space-evenly">
-                    <Button onClick={() => setMenuSelect('home')}>Home</Button>
-                    <Button onClick={() => setMenuSelect('projects')}>Projects</Button>
-                    <Button onClick={() => setMenuSelect('media')}>Media</Button>
-                    <Button onClick={() => setMenuSelect('objects')}>Objects</Button>
+                <div style={{height:'100%'}} className="d-flex flex-column">
+                    <Button variant="altdark" onClick={() => setMenuSelect(<><Home/></>)}>Home</Button>
+                    <Button variant="altdark" onClick={() => setMenuSelect(<><Projects/></>)}>Projects</Button>
+                    <Button variant="altdark" onClick={() => setMenuSelect(<><Media/></>)}>Media</Button>
+                    <Button variant="altdark" onClick={() => setMenuSelect(<><Objects/></>)}>Objects</Button>
+                    <div style={{height:'50%'}}/>
+                    <Button variant="altdark" onClick={() => setMenuSelect(<><Account/></>)}><MdOutlineAccountCircle style={{scale:'2', alignSelf:'center', color:'#FFF', margin:'12%'}}/></Button>
                 </div>
-            </div>    
+            </div>  
         </>
     }
 
     return <>
         <div style={section}>
             <div className="section_box d-flex flex-row-reverse" style={{height:'100%', width:'100%', background:'#FFF'}}>
-                <div className="sideMenu">
+                <div className="mgSideMenu">
                     <SideMenu />
                 </div>
-                <MenuShown />
+                {menuSelect}
             </div>
         </div>
     </>
 }
+
+/*
+                <SideMenu />
+                <MenuShown />
+*/
 
 export default MenuGroup;

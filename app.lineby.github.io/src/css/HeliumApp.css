@@ -40,12 +40,16 @@
   box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
   overflow: auto;
 }
+.section_box_no_shadow {
+  border-radius: 20px;
+  overflow: auto;
+}
 .section_box_spec {
   z-index: 1;
   transition-duration: 0.5s;
   border-radius: 20px;
   box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
-  overflow: auto;
+  overflow: hidden;
 }
 .section_box_spec:hover {
   z-index: inherit;
@@ -64,7 +68,6 @@
 }
 
 /*Mobile View*/
-
 .r_side_menu {
   z-index: 2;
   transition-duration: 0.5s;
@@ -76,19 +79,12 @@
   width: 15vw;
 }
 
-/*Top Bar Section*/
-.top_bar {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 /*~~~ Vert Timeline ~~~*/
 /*Header Box*/
 .headerBox {
   transition-duration: 0.5s;
   z-index: 2;
-  height: 4.5vh;
+  height: 5vh;
   width: 100%;
   align-self: center;
   background: rgba(255,255,255);
@@ -115,7 +111,6 @@
 .headerBox:hover {
   z-index: 2;
 }
-
 .headerBox_title {
   transition-duration: 0.5s;
   height: 4.5vh;
@@ -176,6 +171,7 @@
   font-weight: 600;
   font-size: 22px;
 }
+
 /*QueryBox*/
 .queryBox_pre {
   transition-duration: 0.5s;
@@ -194,7 +190,6 @@
   padding: 1px 1px 1px 1px;
   scale: 1.015;
 }
-
 .queryBox_searchBar {
   border: 0px;
   border-radius: 20px;
@@ -205,61 +200,52 @@
   font-size: 18px;
 }
 
+
 /*Video Player Section*/
 .view_port{
   transition-duration: 0.5s;
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 1;
+  margin: 1.5%;
 }
-.vid_side_menu_icon {
+.view_port:hover{
   transition-duration: 0.5s;
-  scale: 1.35;
-  color: #FFF
+  border-radius: 0px;
 }
-.vid_side_menu_icon:hover {
+.vBottomMenu{
   transition-duration: 0.5s;
-  scale: 1.35;
-  color: #1A1B25;
+  height: 7.5%;
+  z-index: 2;
 }
-.vid_side_menu {
-  transition-duration: 0.5s;
-  height: 35px;
-  width: 35px;
-  background: #1a1b25;
-  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 15px 0px 5px 0px;
-}
-.vid_side_menu:hover {
+.vBottomMenu:hover{
   transition-duration: 0.5s;
   height: 27.5%;
-  width: 15%;
-  background: #FFF;
-  box-shadow: 0px 0px 23px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
+  z-index: 2;
 }
-.vid_side_menu_text{
-  transform: rotate(-90deg);
-}
+
+
 
 
 /*Menu Group Section*/
-.sideMenu {
-  transition-duration: 0.5s;
-  background: #470FF4;
+.menuPage {
+  width: 95%;
   height: 100%;
-  width: 50px;
-  z-index: 2;
 }
-.sideMenu:hover {
+.mgSideMenu {
   transition-duration: 0.5s;
-  background: #470FF4;
+  height:100%;
+  width: 5%;
+  background-color: #1A1B25;
+}
+.mgSideMenu:hover {
+  transition-duration: 0.5s;
   height: 100%;
   width: 20%;
-  z-index: 2;
+  background-color: #1A1B25;
+  z-index: 3;
 }
-.menuPage {
-  width: 100%;
-  height: 100%;
-  padding: 1%;
-}
+
 
 /*Video Component*/
 .thumbnail {
@@ -271,5 +257,27 @@
 }
 .vidView {
   width: 50vw;
+  height: 50vh;
+}
+
+/*Edit Page*/
+.eLayerMenu{
+  transition-duration: 0.5s;
+  width: 3%;
+  height: 100%;
+}
+.eLayerMenu:hover{
+  transition-duration: 0.5s;
+  width: 20%;
+  height: 100%;
+}
+.eTimeline {
+  transition-duration: 0.5s;
+  height: 20vh;
+  padding: 0 1% 1% 1%;
+  z-index: 2;
+}
+.eTimeline:hover {
+  transition-duration: 0.5s;
   height: 50vh;
 }
